@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rangga Pratama — Jasa Pembuatan Aplikasi Web & Android</title>
+<style>
+  :root{
+    --bg: #0b1220;
+    --bg-soft: #0f1a2e;
+    --grid: rgba(94, 160, 255, 0.08);
+    --ink: #e7edf7;
+    --ink-dim: #9fb0c9;
+    --accent: #5ee0c0;
+    --accent-2: #5ea0ff;
+    --warn: #ffb454;
+    --line: rgba(159, 176, 201, 0.18);
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  ::selection{ background:var(--accent); color:#06120f; }
+
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:"//"; opacity:.6;}
+
+  /* NAV */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    backdrop-filter: blur(10px);
+    background: rgba(11,18,32,0.72);
+    border-bottom:1px solid var(--line);
+  }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1120px; margin:0 auto;}
+  .logo{ font-family:var(--mono); font-weight:700; font-size:15px; letter-spacing:.02em;}
+  .logo span{color:var(--accent);}
+  .navlinks{ display:flex; gap:28px; font-size:14px; color:var(--ink-dim);}
+  .navlinks a:hover{color:var(--ink);}
+  .nav-cta{
+    font-family:var(--mono); font-size:13px; padding:9px 16px; border:1px solid var(--accent);
+    border-radius:2px; color:var(--accent); transition:.2s;
+  }
+  .nav-cta:hover{ background:var(--accent); color:#06120f;}
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none;}
+  .burger span{width:22px; height:2px; background:var(--ink);}
+
+  /* HERO */
+  .hero{
+    padding:170px 0 90px; position:relative;
+  }
+  .hero-grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:50px; align-items:center;}
+  .hero h1{
+    font-size:clamp(34px, 5vw, 58px); font-weight:800; line-height:1.08; letter-spacing:-.02em; margin:18px 0 22px;
+  }
+  .hero h1 .hl{ color:var(--accent);}
+  .hero p.lead{ color:var(--ink-dim); font-size:17px; max-width:520px; margin-bottom:32px;}
+  .hero-cta{ display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:14px; padding:13px 22px; border-radius:2px; display:inline-flex; align-items:center; gap:8px;
+    transition:.2s; cursor:pointer; border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--accent); color:#06120f; font-weight:600;}
+  .btn-primary:hover{ background:#7fe9cf; transform:translateY(-1px);}
+  .btn-ghost{ border-color:var(--line); color:var(--ink);}
+  .btn-ghost:hover{ border-color:var(--accent-2); color:var(--accent-2);}
+
+  /* Terminal signature element */
+  .terminal{
+    background:#070c16; border:1px solid var(--line); border-radius:8px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6);
+    overflow:hidden;
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px; padding:11px 14px; background:#0d1526; border-bottom:1px solid var(--line);
+  }
+  .dot{ width:10px; height:10px; border-radius:50%;}
+  .dot.r{background:#ff5f57;} .dot.y{background:#febc2e;} .dot.g{background:#28c840;}
+  .term-title{ margin-left:8px; font-family:var(--mono); font-size:12px; color:var(--ink-dim);}
+  .term-body{ padding:20px 18px; font-family:var(--mono); font-size:13.5px; color:#c7d6ee; min-height:230px;}
+  .term-body .prompt{ color:var(--accent);}
+  .term-body .out{ color:var(--ink-dim);}
+  .cursor{ display:inline-block; width:8px; height:16px; background:var(--accent); vertical-align:middle; animation: blink 1s steps(2) infinite;}
+  @keyframes blink{ 50%{opacity:0;} }
+
+  /* Section shared */
+  section{ padding:100px 0; border-top:1px solid var(--line); position:relative;}
+  .section-head{ max-width:640px; margin-bottom:56px;}
+  .section-head h2{ font-size:clamp(26px,3.4vw,38px); margin-top:14px; font-weight:800; letter-spacing:-.01em;}
+  .section-head p{ color:var(--ink-dim); margin-top:14px; font-size:16px;}
+
+  /* SERVICES */
+  .services-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
+  .service-card{ background:var(--bg-soft); padding:34px 28px; transition:.25s;}
+  .service-card:hover{ background:#12203a;}
+  .service-tag{ font-family:var(--mono); font-size:12px; color:var(--accent-2); letter-spacing:.08em;}
+  .service-card h3{ font-size:20px; margin:14px 0 10px; font-weight:700;}
+  .service-card p{ color:var(--ink-dim); font-size:14.5px;}
+  .service-list{ margin-top:16px; list-style:none; font-size:13.5px; color:var(--ink-dim);}
+  .service-list li{ padding:5px 0; border-top:1px dashed var(--line); display:flex; justify-content:space-between;}
+  .service-list li:first-child{border-top:none;}
+
+  /* PROCESS - true sequence, numbers justified */
+  .process{ position:relative;}
+  .process-line{ position:relative; padding-left:0;}
+  .step{ display:grid; grid-template-columns:90px 1fr; gap:24px; padding:30px 0; border-top:1px solid var(--line);}
+  .step:last-child{border-bottom:1px solid var(--line);}
+  .step-num{ font-family:var(--mono); font-size:34px; color:var(--accent); font-weight:700; opacity:.85;}
+  .step h4{ font-size:19px; margin-bottom:8px;}
+  .step p{ color:var(--ink-dim); font-size:14.5px; max-width:560px;}
+  .step-meta{ font-family:var(--mono); font-size:12px; color:var(--warn); margin-top:8px;}
+
+  /* PORTFOLIO */
+  .portfolio-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px;}
+  .pf-card{
+    border:1px solid var(--line); border-radius:10px; padding:26px; background:var(--bg-soft);
+    position:relative; overflow:hidden; transition:.25s;
+  }
+  .pf-card:hover{ border-color:var(--accent); transform:translateY(-3px);}
+  .pf-platform{ font-family:var(--mono); font-size:11.5px; color:var(--accent); text-transform:uppercase; letter-spacing:.1em;}
+  .pf-card h3{ margin:12px 0 8px; font-size:19px;}
+  .pf-card p{ color:var(--ink-dim); font-size:14px; margin-bottom:16px;}
+  .stack{ display:flex; flex-wrap:wrap; gap:7px;}
+  .chip{ font-family:var(--mono); font-size:11.5px; padding:4px 9px; border:1px solid var(--line); border-radius:20px; color:var(--ink-dim);}
+
+  /* PRICING */
+  .pricing-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .price-card{ border:1px solid var(--line); border-radius:10px; padding:30px 26px; background:var(--bg-soft); display:flex; flex-direction:column;}
+  .price-card.featured{ border-color:var(--accent); background:#0e2f28; position:relative;}
+  .price-card.featured::before{
+    content:"PALING DIPILIH"; position:absolute; top:-1px; right:20px; background:var(--accent); color:#06120f;
+    font-family:var(--mono); font-size:10.5px; padding:4px 10px; border-radius:0 0 6px 6px; letter-spacing:.05em;
+  }
+  .price-name{ font-family:var(--mono); font-size:13px; color:var(--accent-2);}
+  .price-amount{ font-size:32px; font-weight:800; margin:12px 0 4px;}
+  .price-amount span{font-size:14px; color:var(--ink-dim); font-weight:400;}
+  .price-desc{ color:var(--ink-dim); font-size:13.5px; margin-bottom:20px;}
+  .price-feat{ list-style:none; font-size:14px; flex:1;}
+  .price-feat li{ padding:8px 0; border-top:1px dashed var(--line); display:flex; gap:8px;}
+  .price-feat li:first-child{border-top:none;}
+  .price-feat li::before{ content:"✓"; color:var(--accent); font-weight:700;}
+  .price-btn{ margin-top:22px; text-align:center;}
+
+  /* CONTACT */
+  .contact-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+  .form-group{ margin-bottom:18px;}
+  label{ display:block; font-family:var(--mono); font-size:12px; color:var(--ink-dim); margin-bottom:7px; letter-spacing:.04em;}
+  input, textarea, select{
+    width:100%; background:var(--bg-soft); border:1px solid var(--line); color:var(--ink);
+    padding:12px 14px; border-radius:4px; font-family:var(--sans); font-size:14.5px; outline:none; transition:.2s;
+  }
+  input:focus, textarea:focus, select:focus{ border-color:var(--accent);}
+  textarea{ min-height:110px; resize:vertical;}
+  .submit-btn{ width:100%; justify-content:center; font-size:14.5px; padding:14px;}
+  .contact-info{ font-family:var(--mono); font-size:14px; color:var(--ink-dim); line-height:2;}
+  .contact-info a{ color:var(--accent-2);}
+  .form-note{ font-family:var(--mono); font-size:12px; color:var(--accent); margin-top:12px; min-height:16px;}
+
+  footer{ padding:40px 0; text-align:center; color:var(--ink-dim); font-family:var(--mono); font-size:12.5px; border-top:1px solid var(--line);}
+
+  @media (max-width: 860px){
+    .hero-grid{ grid-template-columns:1fr;}
+    .navlinks{ display:none;}
+    .burger{ display:flex;}
+    .services-grid{ grid-template-columns:1fr;}
+    .pricing-grid{ grid-template-columns:1fr;}
+    .contact-wrap{ grid-template-columns:1fr;}
+    .step{ grid-template-columns:60px 1fr;}
+    .step-num{font-size:26px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">rangga<span>.dev</span></div>
+    <div class="navlinks">
+      <a href="#layanan">Layanan</a>
+      <a href="#proses">Proses</a>
+      <a href="#karya">Karya</a>
+      <a href="#harga">Harga</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+    <a href="#kontak" class="nav-cta">Mulai Proyek</a>
+    <button class="burger" onclick="document.querySelector('.navlinks').classList.toggle('mobile-open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Freelance Developer — Web & Android</div>
+      <h1>Bangun aplikasi<br> yang <span class="hl">jalan mulus</span><br> di setiap layar.</h1>
+      <p class="lead">Saya bantu bisnis dan startup wujudkan ide jadi aplikasi web maupun Android yang rapi, cepat, dan gampang dikembangkan lagi ke depannya — dari desain sampai rilis.</p>
+      <div class="hero-cta">
+        <a href="#kontak" class="btn btn-primary">Diskusikan proyek anda →</a>
+        <a href="#karya" class="btn btn-ghost">Lihat karya</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="term-title">project-init.sh</div>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<section id="layanan">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Layanan</div>
+      <h2>Dua platform, satu standar kerja.</h2>
+      <p>Setiap proyek dikerjakan dengan arsitektur yang jelas dan kode yang terdokumentasi, jadi mudah dirawat siapa pun setelah proyek selesai.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-tag">01 — WEB APP</div>
+        <h3>Aplikasi Web</h3>
+        <p>Landing page, dashboard admin, sistem internal, hingga platform SaaS berbasis browser.</p>
+        <ul class="service-list">
+          <li><span>Frontend</span><span>React / Next.js</span></li>
+          <li><span>Backend</span><span>Node.js / Laravel</span></li>
+          <li><span>Database</span><span>PostgreSQL / MySQL</span></li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-tag">02 — ANDROID</div>
+        <h3>Aplikasi Android</h3>
+        <p>Aplikasi mobile native maupun cross-platform, siap publish ke Google Play Store.</p>
+        <ul class="service-list">
+          <li><span>Native</span><span>Kotlin</span></li>
+          <li><span>Cross-platform</span><span>Flutter</span></li>
+          <li><span>Backend/API</span><span>Firebase / REST</span></li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-tag">03 — MAINTENANCE</div>
+        <h3>Perawatan & Support</h3>
+        <p>Perbaikan bug, update fitur, optimasi performa untuk aplikasi yang sudah berjalan.</p>
+        <ul class="service-list">
+          <li><span>Monitoring</span><span>Bulanan</span></li>
+          <li><span>Bug fix</span><span>Respon &lt; 24 jam</span></li>
+          <li><span>Update</span><span>Sesuai kebutuhan</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proses">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Proses Kerja</div>
+      <h2>Empat tahap, dari brief sampai rilis.</h2>
+      <p>Urutan ini memang berjalan berurutan — setiap tahap butuh persetujuan anda sebelum lanjut ke tahap berikutnya.</p>
+    </div>
+    <div class="process-line">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <h4>Diskusi & Perencanaan</h4>
+          <p>Ngobrol soal kebutuhan, target pengguna, dan fitur wajib vs fitur tambahan. Hasilnya jadi dokumen scope kerja.</p>
+          <div class="step-meta">durasi: 2–4 hari</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <h4>Desain (UI/UX)</h4>
+          <p>Wireframe dan tampilan visual dibuat dulu untuk disetujui, sebelum masuk ke tahap coding.</p>
+          <div class="step-meta">durasi: 3–7 hari</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <h4>Pengembangan</h4>
+          <p>Proses coding dengan update progress berkala, biasanya tiap minggu, lewat demo langsung.</p>
+          <div class="step-meta">durasi: 2–8 minggu (tergantung skala)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div>
+          <h4>Testing & Rilis</h4>
+          <p>Pengujian menyeluruh, perbaikan bug, lalu deploy ke server atau publish ke Play Store.</p>
+          <div class="step-meta">durasi: 3–5 hari</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="karya">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Karya Terpilih</div>
+      <h2>Beberapa proyek yang pernah dikerjakan.</h2>
+      <p>Contoh proyek untuk menggambarkan jenis pekerjaan — ganti dengan proyek anda sendiri.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="pf-card">
+        <div class="pf-platform">Web · Dashboard</div>
+        <h3>Sistem Manajemen Inventori</h3>
+        <p>Dashboard untuk toko retail memantau stok, penjualan, dan laporan otomatis secara real-time.</p>
+        <div class="stack">
+          <span class="chip">Next.js</span><span class="chip">PostgreSQL</span><span class="chip">Tailwind</span>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-platform">Android · Native</div>
+        <h3>Aplikasi Pemesanan Katering</h3>
+        <p>Aplikasi Android untuk pemesanan menu harian dengan notifikasi status pesanan real-time.</p>
+        <div class="stack">
+          <span class="chip">Kotlin</span><span class="chip">Firebase</span><span class="chip">Play Store</span>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-platform">Web · Landing</div>
+        <h3>Landing Page Startup Fintech</h3>
+        <p>Landing page konversi tinggi lengkap dengan animasi scroll dan integrasi form pendaftaran.</p>
+        <div class="stack">
+          <span class="chip">React</span><span class="chip">Framer Motion</span>
+        </div>
+      </div>
+      <div class="pf-card">
+        <div class="pf-platform">Android · Cross-platform</div>
+        <h3>Aplikasi Presensi Karyawan</h3>
+        <p>Absensi berbasis lokasi & wajah untuk perusahaan dengan banyak cabang.</p>
+        <div class="stack">
+          <span class="chip">Flutter</span><span class="chip">REST API</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="harga">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Investasi</div>
+      <h2>Paket harga, transparan dari awal.</h2>
+      <p>Harga dasar sebagai acuan — bisa disesuaikan lagi setelah diskusi kebutuhan lengkap.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">STARTER</div>
+        <div class="price-amount">Rp 3.500.000<span> mulai dari</span></div>
+        <div class="price-desc">Untuk landing page atau aplikasi sederhana 1–3 halaman/fitur.</div>
+        <ul class="price-feat">
+          <li>1–3 halaman/fitur utama</li>
+          <li>Desain UI dasar</li>
+          <li>Revisi 2x</li>
+          <li>Waktu kerja ±2 minggu</li>
+        </ul>
+        <div class="price-btn"><a href="#kontak" class="btn btn-ghost">Pilih Starter</a></div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-name">BUSINESS</div>
+        <div class="price-amount">Rp 9.000.000<span> mulai dari</span></div>
+        <div class="price-desc">Untuk aplikasi web/Android dengan fitur & integrasi menengah.</div>
+        <ul class="price-feat">
+          <li>Hingga 8 fitur/halaman</li>
+          <li>Desain UI kustom</li>
+          <li>Integrasi API/database</li>
+          <li>Revisi 4x</li>
+          <li>Waktu kerja 4–6 minggu</li>
+        </ul>
+        <div class="price-btn"><a href="#kontak" class="btn btn-primary">Pilih Business</a></div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">ENTERPRISE</div>
+        <div class="price-amount">Custom<span> sesuai kebutuhan</span></div>
+        <div class="price-desc">Untuk sistem kompleks, multi-platform, atau kebutuhan tim jangka panjang.</div>
+        <ul class="price-feat">
+          <li>Fitur tanpa batas</li>
+          <li>Web + Android sekaligus</li>
+          <li>Dukungan prioritas</li>
+          <li>Kontrak perawatan bulanan</li>
+        </ul>
+        <div class="price-btn"><a href="#kontak" class="btn btn-ghost">Diskusikan Kebutuhan</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kontak">
+  <div class="wrap contact-wrap">
+    <div>
+      <div class="eyebrow">Kontak</div>
+      <h2 style="font-size:32px; font-weight:800; margin:14px 0 18px;">Ceritakan idenya, saya bantu wujudkan.</h2>
+      <p style="color:var(--ink-dim); margin-bottom:26px;">Isi form ini dengan gambaran proyek anda. Biasanya saya balas dalam 1x24 jam.</p>
+      <div class="contact-info">
+        email: <a href="mailto:hello@rangga.dev">hello@rangga.dev</a><br>
+        whatsapp: <a href="#">+62 8xx-xxxx-xxxx</a><br>
+        lokasi: Indonesia (remote friendly)
+      </div>
+    </div>
+    <form id="contactForm">
+      <div class="form-group">
+        <label for="nama">Nama</label>
+        <input type="text" id="nama" required placeholder="Nama lengkap anda">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="email@contoh.com">
+      </div>
+      <div class="form-group">
+        <label for="platform">Jenis Aplikasi</label>
+        <select id="platform">
+          <option>Aplikasi Web</option>
+          <option>Aplikasi Android</option>
+          <option>Web + Android</option>
+          <option>Belum yakin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pesan">Ceritakan Proyek Anda</label>
+        <textarea id="pesan" required placeholder="Contoh: saya butuh aplikasi kasir untuk toko dengan fitur laporan penjualan..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary submit-btn">Kirim Pesan →</button>
+      <div class="form-note" id="formNote"></div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 rangga.dev — dibangun dengan HTML, CSS, dan kopi.</div>
+</footer>
+
+<script>
+  // Typing terminal effect
+  const lines = [
+    { p: "$ ", t: "whoami", cls:"prompt" },
+    { p: "", t: "developer web & android · 4+ tahun pengalaman", cls:"out" },
+    { p: "$ ", t: "cat layanan.txt", cls:"prompt" },
+    { p: "", t: "→ Aplikasi Web (React, Next.js, Laravel)", cls:"out" },
+    { p: "", t: "→ Aplikasi Android (Kotlin, Flutter)", cls:"out" },
+    { p: "", t: "→ Maintenance & optimasi performa", cls:"out" },
+    { p: "$ ", t: "./mulai-proyek.sh --client=anda", cls:"prompt" },
+    { p: "", t: "✓ siap menerima brief proyek baru", cls:"out" },
+  ];
+
+  const termBody = document.getElementById('termBody');
+  let li = 0, ci = 0;
+
+  function typeLine(){
+    if(li >= lines.length){
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      termBody.appendChild(cursor);
+      return;
+    }
+    const line = lines[li];
+    const div = document.createElement('div');
+    div.innerHTML = `<span class="prompt">${line.p}</span><span class="${line.cls}" id="tline${li}"></span>`;
+    termBody.appendChild(div);
+    const target = div.querySelector(`#tline${li}`);
+
+    function typeChar(){
+      if(ci < line.t.length){
+        target.textContent += line.t[ci];
+        ci++;
+        setTimeout(typeChar, 18 + Math.random()*22);
+      } else {
+        ci = 0; li++;
+        setTimeout(typeLine, 280);
+      }
+    }
+    typeChar();
+  }
+  typeLine();
+
+  // Contact form (demo only, no backend)
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const note = document.getElementById('formNote');
+    note.textContent = '✓ Pesan siap dikirim — hubungkan form ini ke email/WhatsApp anda untuk menerima pesan sungguhan.';
+    this.reset();
+  });
+
+  // mobile nav toggle style injection
+  const style = document.createElement('style');
+  style.textContent = `
+    .navlinks.mobile-open{
+      display:flex !important; position:fixed; top:64px; left:0; right:0; background:var(--bg-soft);
+      flex-direction:column; padding:20px 24px; gap:16px; border-bottom:1px solid var(--line);
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>
